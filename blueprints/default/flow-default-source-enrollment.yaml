@@ -4,8 +4,8 @@ metadata:
 entries:
 - attrs:
     designation: enrollment
-    name: Welcome to authentik! Please select a username.
-    title: Welcome to authentik! Please select a username.
+    name: Finish your ZenMind account
+    title: Finish your ZenMind account
     authentication: none
   identifiers:
     slug: default-source-enrollment

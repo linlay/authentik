@@ -68,6 +68,8 @@ const sortLoginSources = (a: LoginSource, b: LoginSource) =>
         .with([false, true], () => 1)
         .otherwise(() => 0);
 
+const isGoogleSource = (name: string) => name.toLowerCase().includes("google");
+
 @customElement("ak-stage-identification")
 export class IdentificationStage extends BaseStage<
     IdentificationChallenge,
@@ -332,6 +334,7 @@ export class IdentificationStage extends BaseStage<
             class="pf-c-form__group"
             .errors=${challenge.responseErrors?.password}
             ?allow-show-password=${allowShowPassword}
+            required
             prefill=${PasswordManagerPrefill.password ?? ""}
         ></ak-flow-input-password> `;
     }
@@ -353,7 +356,10 @@ export class IdentificationStage extends BaseStage<
 
         const offerRecovery = flowDesignation === FlowDesignationEnum.Recovery;
         const type = fields.length === 1 && fields[0] === UserFieldsEnum.Email ? "email" : "text";
-        const label = OR_LIST_FORMATTERS.format(fields.map((f) => UI_FIELDS[f]));
+        const label =
+            fields.includes(UserFieldsEnum.Email) && fields.includes(UserFieldsEnum.Username)
+                ? msg("Username or email")
+                : OR_LIST_FORMATTERS.format(fields.map((f) => UI_FIELDS[f]));
 
         // prettier-ignore
         return html`${offerRecovery ? this.renderRecoveryMessage() : nothing}
@@ -397,6 +403,8 @@ export class IdentificationStage extends BaseStage<
         const { name, iconUrl, challenge } = source;
 
         const icon = renderSourceIcon(name, iconUrl);
+        const visibleLabel = isGoogleSource(name) ? msg("Continue with Google") : name;
+        const showVisibleLabel = showLabels || isGoogleSource(name);
         return html`<button
             type="button"
             @click=${() => this.#dispatchChallengeToHost(challenge)}
@@ -406,12 +414,16 @@ export class IdentificationStage extends BaseStage<
             aria-label=${msg(str`Continue with ${name}`)}
         >
             <span class="pf-c-button__icon pf-m-start">${icon}</span>
-            ${showLabels ? name : ""}
+            ${showVisibleLabel ? html`<span>${visibleLabel}</span>` : nothing}
         </button>`;
     }
 
     protected renderPromotedSource(source: LoginSource) {
-        const { name, challenge } = source;
+        const { name, iconUrl, challenge } = source;
+        const icon = renderSourceIcon(name, iconUrl);
+        const visibleLabel = isGoogleSource(name)
+            ? msg("Continue with Google")
+            : msg(str`Continue with ${name}`);
 
         return html`<button
             type="button"
@@ -421,7 +433,8 @@ export class IdentificationStage extends BaseStage<
             class="pf-c-button pf-m-primary pf-m-block source-button source-button-promoted"
             aria-label=${msg(str`Continue with ${name}`)}
         >
-            ${msg(str`Continue with ${name}`)}
+            <span class="pf-c-button__icon pf-m-start">${icon}</span>
+            <span>${visibleLabel}</span>
         </button>`;
     }
 
@@ -432,19 +445,17 @@ export class IdentificationStage extends BaseStage<
     }
 
     protected renderLoginSources(sources: LoginSource[], showLabels: boolean) {
-        return html`<fieldset
-            slot="footer"
-            part="source-list"
-            name="login-sources"
-            class="ak-c-fieldset pf-c-form__group"
-        >
-            <legend class="sr-only">${msg("Login sources")}</legend>
-            ${repeat(
-                [...sources].sort(sortLoginSources),
-                (source, idx) => source.name + idx,
-                (source) => this.renderLoginSource(source, showLabels),
-            )}
-        </fieldset> `;
+        return html`<div slot="footer" class="zenmind-source-footer">
+            <ak-divider>${msg("Or")}</ak-divider>
+            <fieldset part="source-list" name="login-sources" class="ak-c-fieldset pf-c-form__group">
+                <legend class="sr-only">${msg("Login sources")}</legend>
+                ${repeat(
+                    [...sources].sort(sortLoginSources),
+                    (source, idx) => source.name + idx,
+                    (source) => this.renderLoginSource(source, showLabels),
+                )}
+            </fieldset>
+        </div> `;
     }
 
     protected renderIdentificationStage(challenge: IdentificationChallenge) {

@@ -421,6 +421,14 @@ export class FlowExecutor extends WithBrandConfig(Interface) implements StageHos
         });
     }
 
+    protected renderZenMindIntro(): SlottedTemplateResult {
+        return html`<aside class="zenmind-login-copy" part="zenmind-login-copy">
+            <p class="zenmind-login-eyebrow">${msg("ZenMind Identity")}</p>
+            <h2>${msg("Sign in to ZenMind")}</h2>
+            <p>${msg("Use your account or Google to continue.")}</p>
+        </aside>`;
+    }
+
     protected override render(): SlottedTemplateResult {
         const { challenge, loading } = this;
 
@@ -433,6 +441,7 @@ export class FlowExecutor extends WithBrandConfig(Interface) implements StageHos
             <header class="pf-c-login__header">
                 <ak-flow-inspector-button></ak-flow-inspector-button>
             </header>
+            ${this.renderZenMindIntro()}
             <main
                 data-layout=${this.layout}
                 class="pf-c-login__main"
@@ -440,13 +449,16 @@ export class FlowExecutor extends WithBrandConfig(Interface) implements StageHos
                 part="main"
             >
                 <div class="pf-c-login__main-header pf-c-brand" part="branding">
-                    ${ThemedImage({
-                        src: this.brandingLogo,
-                        alt: msg("authentik Logo"),
-                        className: "branding-logo",
-                        theme: this.activeTheme,
-                        themedUrls: this.brandingLogoThemedUrls,
-                    })}
+                    <div class="zenmind-brand-lockup">
+                        ${ThemedImage({
+                            src: this.brandingLogo,
+                            alt: msg("ZenMind logo"),
+                            className: "branding-logo",
+                            theme: this.activeTheme,
+                            themedUrls: this.brandingLogoThemedUrls,
+                        })}
+                        <span>ZenMind</span>
+                    </div>
                 </div>
                 ${loading && challenge ? html`<ak-loading-overlay></ak-loading-overlay>` : nothing}
                 ${guard([challenge], () => {

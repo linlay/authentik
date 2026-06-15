@@ -1,3 +1,24 @@
+input[name="uidField"],
+ak-stage-identification.style-scope input[name="uidField"] {
+    min-height: 2.875rem;
+    border-color: color-mix(in srgb, #00a2ff 18%, var(--pf-global--BorderColor--100));
+    border-radius: 0.5rem;
+}
+
+button[type="submit"].pf-c-button.pf-m-primary,
+ak-stage-identification.style-scope button[type="submit"].pf-c-button.pf-m-primary {
+    min-height: 2.875rem;
+    border-radius: 0.5rem;
+    background: linear-gradient(135deg, #00a2ff, #5f3bff);
+    font-weight: 800;
+}
+
+.zenmind-source-footer,
+ak-stage-identification.style-scope .zenmind-source-footer {
+    display: grid;
+    gap: var(--pf-global--spacer--md);
+}
+
 fieldset[name="login-sources"],
 ak-stage-identification.style-scope fieldset[name="login-sources"] {
     & {
@@ -18,6 +39,9 @@ ak-stage-identification.style-scope fieldset[name="login-sources"] {
         align-items: center;
         justify-content: center;
         gap: var(--pf-global--spacer--sm);
+        min-height: 2.875rem;
+        border-radius: 0.5rem;
+        font-weight: 800;
         flex: 0 1 auto;
 
         &:not(.pf-m-primary):hover {
@@ -33,6 +57,9 @@ ak-stage-identification.style-scope fieldset[name="login-sources"] {
         flex: 1 1 100%;
         width: 100%;
         margin-block-end: var(--pf-global--spacer--sm);
+        border: 1px solid color-mix(in srgb, #172033 14%, transparent);
+        color: #172033;
+        background: #ffffff;
 
         &:last-of-type {
             margin-block-end: var(--pf-global--spacer--lg);
@@ -47,6 +74,15 @@ ak-stage-identification.style-scope fieldset[name="login-sources"] {
     @media (min-width: 768px) {
         --ak-c-login-sources-padding-inline: var(--pf-global--spacer--2xl);
     }
+}
+
+button[name*="google" i].source-button,
+ak-stage-identification.style-scope button[name*="google" i].source-button {
+    flex: 1 1 100%;
+    width: 100%;
+    border: 1px solid color-mix(in srgb, #172033 14%, transparent);
+    color: #172033;
+    background: #ffffff;
 }
 
 .captcha-container {

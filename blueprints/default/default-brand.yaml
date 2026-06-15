@@ -18,6 +18,9 @@ entries:
         name: Default - User settings flow
       required: false
   - attrs:
+      branding_favicon: /static/dist/assets/images/zenmind-logo.svg
+      branding_logo: /static/dist/assets/images/zenmind-logo.svg
+      branding_title: ZenMind
       flow_authentication:
         !Find [authentik_flows.flow, [slug, default-authentication-flow]]
       flow_invalidation:
