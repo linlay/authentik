@@ -5,14 +5,14 @@
 {% load authentik_core %}
 
 {% block head_before %}
-<link rel="prefetch" href="{{ request.brand.branding_default_flow_background_url }}" />
+{# ZenMind keeps the login surface lightweight, so the default flow background is not prefetched. #}
 {% include "base/header_js.html" %}
 {% endblock %}
 
 {% block head %}
 <style data-id="static-styles">
     :root {
-        --ak-global--background-image: url("{{ request.brand.branding_default_flow_background_url|iriencode|safe }}");
+        --ak-global--background-image: none;
     }
 </style>
 
@@ -31,7 +31,10 @@
                     <div class="pf-c-login" data-layout="stacked">
                         <main class="pf-c-login__main" aria-label="Authentication form">
                             <div class="pf-c-login__main-header pf-c-brand">
-                                <img class="branding-logo" src="{{ brand.branding_logo_url }}" alt="authentik Logo" />
+                                <div class="zenmind-brand-lockup">
+                                    <img class="branding-logo" src="/static/dist/assets/images/zenmind-logo.svg" alt="ZenMind logo" />
+                                    <span>ZenMind</span>
+                                </div>
                             </div>
                             <div class="pf-c-login__main-header">
                                 <h1 class="pf-c-title pf-m-3xl" data-test-id="card-title">

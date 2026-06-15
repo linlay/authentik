@@ -2,48 +2,54 @@
 
 :host,
 ak-flow-executor.style-scope {
-    --zenmind-login-accent: #00a2ff;
-    --zenmind-login-accent-strong: #5f3bff;
-    --zenmind-login-ink: #172033;
-    --zenmind-login-muted: #5c667a;
-    --zenmind-login-panel: color-mix(in srgb, #ffffff 90%, transparent);
-    --zenmind-login-ring: color-mix(in srgb, var(--zenmind-login-accent) 24%, transparent);
+    --zenmind-login-accent: #0b75ff;
+    --zenmind-login-accent-hover: #075fd1;
+    --zenmind-login-ink: #141b2d;
+    --zenmind-login-muted: #657084;
+    --zenmind-login-border: #d9e1ec;
+    --zenmind-login-surface: #ffffff;
+    --zenmind-login-bg: #f7f8fa;
 
-    display: flex;
+    display: grid;
+    grid-template-areas:
+        "."
+        "main"
+        "footer"
+        ".";
+    grid-template-columns: minmax(0, 100%);
+    grid-template-rows: 1fr auto auto 1fr;
+    row-gap: var(--pf-global--spacer--md);
+    align-items: start;
+    justify-items: center;
+    justify-content: center;
     min-height: 100dvh;
-    flex-flow: column nowrap;
-    background:
-        radial-gradient(
-            circle at 14% 18%,
-            color-mix(in srgb, #00a2ff 18%, transparent),
-            transparent 28rem
-        ),
-        radial-gradient(
-            circle at 86% 18%,
-            color-mix(in srgb, #bb2be2 16%, transparent),
-            transparent 26rem
-        ),
-        linear-gradient(135deg, #f8fbff 0%, #eef6ff 46%, #ffffff 100%);
+    box-sizing: border-box;
+    padding: clamp(1rem, 4vw, 3rem);
+    color: var(--zenmind-login-ink);
+    background: var(--zenmind-login-bg);
+}
+
+:host([data-layout^="content"]),
+:host([data-layout^="sidebar"]),
+ak-flow-executor[data-layout^="content"].style-scope,
+ak-flow-executor[data-layout^="sidebar"].style-scope {
+    display: grid;
+    grid-template-areas:
+        "."
+        "main"
+        "footer"
+        ".";
+    grid-template-columns: minmax(0, 100%);
+    grid-template-rows: 1fr auto auto 1fr;
 }
 
 :host([theme="dark"]),
 ak-flow-executor[theme="dark"].style-scope {
-    --zenmind-login-ink: #eef5ff;
-    --zenmind-login-muted: #aeb8c8;
-    --zenmind-login-panel: color-mix(in srgb, #121927 90%, transparent);
-
-    background:
-        radial-gradient(
-            circle at 18% 20%,
-            color-mix(in srgb, #00a2ff 24%, transparent),
-            transparent 28rem
-        ),
-        radial-gradient(
-            circle at 84% 16%,
-            color-mix(in srgb, #bb2be2 18%, transparent),
-            transparent 24rem
-        ),
-        linear-gradient(135deg, #08111f 0%, #111a2d 54%, #0a0e18 100%);
+    --zenmind-login-ink: #f4f7fb;
+    --zenmind-login-muted: #a9b4c4;
+    --zenmind-login-border: #283346;
+    --zenmind-login-surface: #111827;
+    --zenmind-login-bg: #0b1120;
 }
 
 ak-flow-inspector-button {
@@ -53,164 +59,114 @@ ak-flow-inspector-button {
     z-index: 100;
 }
 
+.pf-c-login__header {
+    position: absolute;
+    inset-block-start: var(--pf-global--spacer--md);
+    inset-inline-end: var(--pf-global--spacer--md);
+    padding: 0;
+}
+
 .zenmind-login-copy {
-    grid-area: header;
-    z-index: 1;
-    align-self: end;
-    justify-self: center;
-    width: min(32rem, calc(100dvw - 2rem));
-    color: var(--zenmind-login-ink);
-    padding: 2rem 1.5rem 1.5rem;
-    text-align: center;
-}
-
-.zenmind-login-copy h2 {
-    margin: 0;
-    font-size: clamp(2rem, 4vw, 3.5rem);
-    line-height: 1.02;
-    font-weight: 850;
-    letter-spacing: 0;
-}
-
-.zenmind-login-copy p {
-    margin: 0.9rem auto 0;
-    color: var(--zenmind-login-muted);
-    font-size: 1rem;
-    line-height: 1.65;
-    max-width: 24rem;
-}
-
-.zenmind-login-eyebrow {
-    margin: 0 0 0.85rem !important;
-    color: var(--zenmind-login-accent-strong) !important;
-    font-size: 0.78rem !important;
-    line-height: 1 !important;
-    font-weight: 850;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    display: none;
 }
 
 .zenmind-brand-lockup {
     display: inline-flex;
     align-items: center;
-    gap: 0.75rem;
+    justify-content: center;
+    gap: 0.625rem;
     color: var(--zenmind-login-ink);
-    font-size: 1.2rem;
-    font-weight: 850;
+    font-size: 1.15rem;
+    font-weight: 800;
+    line-height: 1;
 }
 
 .zenmind-brand-lockup .branding-logo {
-    width: 2.75rem;
-    height: 2.75rem;
+    width: 2rem;
+    height: 2rem;
     object-fit: contain;
+}
+
+.pf-c-login__main {
+    grid-area: main;
+    width: min(100%, var(--ak-c-login--MaxWidth));
+    align-self: start;
+    justify-self: center;
+}
+
+.pf-c-login__footer {
+    display: none;
+    grid-area: footer;
+    color: var(--zenmind-login-muted);
+    align-self: start;
+    justify-self: center;
+}
+
+:host([data-layout^="content"]) .pf-c-login__main,
+:host([data-layout^="sidebar"]) .pf-c-login__main,
+ak-flow-executor[data-layout^="content"].style-scope .pf-c-login__main,
+ak-flow-executor[data-layout^="sidebar"].style-scope .pf-c-login__main {
+    grid-area: main;
+    width: min(100%, var(--ak-c-login--MaxWidth));
+    align-self: start;
+    justify-self: center;
+}
+
+:host([data-layout^="content"]) .pf-c-login__footer,
+:host([data-layout^="sidebar"]) .pf-c-login__footer,
+ak-flow-executor[data-layout^="content"].style-scope .pf-c-login__footer,
+ak-flow-executor[data-layout^="sidebar"].style-scope .pf-c-login__footer {
+    grid-area: footer;
+    align-self: start;
+    justify-self: center;
 }
 
 [part="locale-select"],
 [part="locale-select"].style-scope {
-    --pf-global--Color--100: var(--pf-global--Color--light-100) !important;
-    --ak-c-flow-executor__locale-select--Padding: var(--pf-global--spacer--md);
-    --ak-c-flow-executor__locale-select--Color: var(--pf-global--Color--100);
-    --ak-c-locale-select--label--Color: var(--ak-c-flow-executor__locale-select--Color);
+    display: none;
 
-    /* Compatibility mode */
-    color: var(--ak-c-flow-executor__locale-select--Color);
+    --ak-c-flow-executor__locale-select--Color: var(--zenmind-login-muted);
+    --ak-c-locale-select--label--Color: var(--zenmind-login-muted);
+    --ak-c-locale-select--BackgroundColor: transparent;
+
     position: absolute;
-    inset-block-start: var(--ak-c-flow-executor__locale-select--Padding);
-    inset-inline-start: var(--ak-c-flow-executor__locale-select--Padding);
-    font-weight: 500;
+    inset-block-start: var(--pf-global--spacer--md);
+    inset-inline-start: var(--pf-global--spacer--md);
     z-index: 100;
-
-    /* Slight differences in browser hover states. */
-    &:has(select:hover),
-    &:hover {
-        --ak-c-locale-select--label--Color: var(
-            --ak-c-flow-executor__locale-select--Color--hover,
-            var(--ak-c-flow-executor__locale-select--Color)
-        );
-        --ak-c-locale-select--BackgroundColor: var(
-            --ak-c-flow-executor__locale-select--BackgroundColor--hover
-        );
-        --ak-c-locale-select--TextDecorationColor: var(--ak-c-locale-select--label--Color);
-        --ak-c-locale-select__after--Opacity: 1;
-
-        --ak-c-locale-select--Color: var(--ak-c-flow-executor__locale-select--Color--hover);
-
-        @media (prefers-contrast: more) {
-            --ak-c-locale--select--OutlineColor: var(--pf-global--primary-color--dark-100);
-        }
-    }
-
-    filter: var(--ak-global--BackgroundContrastFilter);
-
-    grid-area: header;
-
-    /* At least a third of the card cut-off is available. */
-    @media (width <= 61.25rem) and (height <= 61.25rem) {
-        --ak-global--BackgroundContrastFilter: none;
-        --ak-c-flow-executor__locale-select--Color: var(--ak-c-login__main--Color);
-
-        grid-area: main;
-    }
-
-    @media (width <= 61.25rem) and (height <= 61.25rem) and (not (prefers-contrast: more)) {
-        --ak-c-locale-select--Opacity: 0;
-
-        &:hover {
-            --ak-c-locale-select--Opacity: 1;
-            --ak-c-locale-select__after--Opacity: 1;
-        }
-    }
-
-    /* Card is fully masked to mobile background. */
-    @media (width <= 35rem) {
-        grid-row: header;
-    }
+    color: var(--zenmind-login-muted);
+    font-weight: 500;
+    filter: none;
 }
 
-@media (min-width: 70rem) and (min-height: 17.5rem) {
+[part="locale-select"]:has(select:hover),
+[part="locale-select"]:hover,
+[part="locale-select"].style-scope:has(select:hover),
+[part="locale-select"].style-scope:hover {
+    --ak-c-flow-executor__locale-select--Color: var(--zenmind-login-ink);
+    --ak-c-locale-select--label--Color: var(--zenmind-login-ink);
+}
+
+.ak-c-login__content {
+    display: none;
+}
+
+@media (width <= 35rem) {
     :host,
     ak-flow-executor.style-scope {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(26rem, 34rem);
-        grid-template-rows: minmax(0, 1fr) auto;
-        column-gap: clamp(3rem, 8vw, 8rem);
-        align-items: center;
-        padding-inline: clamp(3rem, 8vw, 8rem);
-    }
-
-    .zenmind-login-copy {
-        grid-area: 1 / 1 / 2 / 2;
-        justify-self: start;
-        align-self: center;
-        width: min(44rem, 100%);
-        padding: 0;
-        text-align: start;
-    }
-
-    .zenmind-login-copy p {
-        margin-inline: 0;
-    }
-
-    .pf-c-login__header {
-        grid-area: 1 / 1 / 2 / 3;
+        grid-template-rows: auto auto 1fr;
+        grid-template-areas:
+            "main"
+            "footer"
+            ".";
+        padding-block: 4.5rem 1rem;
     }
 
     .pf-c-login__main {
-        grid-area: 1 / 2 / 2 / 3;
-        justify-self: stretch;
         width: 100%;
     }
 
     .pf-c-login__footer {
-        grid-area: 2 / 1 / 3 / 3;
-    }
-
-    :host([data-layout^="sidebar"]),
-    [data-layout^="sidebar"] /* Compatibility mode */ {
-        --ak-global--BackgroundContrastFilter: none !important;
-
-        [part="locale-select"] {
-            --ak-c-flow-executor__locale-select--Color: inherit !important;
-        }
+        position: static;
+        margin-block-start: var(--pf-global--spacer--md);
     }
 }

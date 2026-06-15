@@ -111,6 +111,41 @@
 
 /* #endregion */
 
+/* #region ZenMind Simple Login */
+
+.pf-c-login::before,
+.pf-c-login::after {
+    display: none !important;
+    content: none !important;
+}
+
+.pf-c-login__main {
+    border: 1px solid var(--zenmind-login-border, #d9e1ec);
+    border-radius: 0.5rem;
+    background: var(--zenmind-login-surface, var(--ak-c-login__main--BackgroundColor));
+    box-shadow: var(--ak-c-login__main--BoxShadow) !important;
+    backdrop-filter: none;
+}
+
+.pf-c-login__main-header.pf-c-brand {
+    padding-block-start: var(--pf-global--spacer--2xl);
+    padding-block-end: var(--pf-global--spacer--sm);
+}
+
+.pf-c-login__main-header.pf-c-brand .branding-logo {
+    max-width: 2.25rem;
+}
+
+.pf-c-login__main-body {
+    padding-block-start: var(--pf-global--spacer--xs);
+}
+
+.pf-c-login__footer {
+    display: none;
+}
+
+/* #endregion */
+
 /* #region Main Footer */
 
 /* compatibility-mode-fix */

@@ -19,7 +19,7 @@ entries:
     required: false
 - attrs:
     designation: authentication
-    layout: content_right
+    layout: stacked
     name: Sign in to ZenMind
     title: Sign in to ZenMind
     authentication: none

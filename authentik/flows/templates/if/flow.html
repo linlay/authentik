@@ -7,7 +7,7 @@
 
 {% block head_before %}
 {{ block.super }}
-<link rel="prefetch" href="{{ flow_background_url }}" />
+{# ZenMind keeps the login surface lightweight, so the default flow background is not prefetched. #}
 {% if flow.compatibility_mode and not inspector %}
 {% comment %}
     @see {@link web/types/webcomponents.d.ts} for type definitions.
@@ -39,7 +39,7 @@
 <script src="{% versioned_script 'dist/flow/FlowInterface-%v.js' %}" type="module"></script>
 <style data-id="flow-css">
   :root {
-      --ak-global--background-image: url("{{ flow_background_url|iriencode|safe }}");
+      --ak-global--background-image: none;
   }
 </style>
 {% endblock %}

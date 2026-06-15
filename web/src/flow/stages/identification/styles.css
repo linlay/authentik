@@ -1,7 +1,7 @@
 input[name="uidField"],
 ak-stage-identification.style-scope input[name="uidField"] {
     min-height: 2.875rem;
-    border-color: color-mix(in srgb, #00a2ff 18%, var(--pf-global--BorderColor--100));
+    border-color: color-mix(in srgb, #0b75ff 14%, var(--pf-global--BorderColor--100));
     border-radius: 0.5rem;
 }
 
@@ -9,8 +9,13 @@ button[type="submit"].pf-c-button.pf-m-primary,
 ak-stage-identification.style-scope button[type="submit"].pf-c-button.pf-m-primary {
     min-height: 2.875rem;
     border-radius: 0.5rem;
-    background: linear-gradient(135deg, #00a2ff, #5f3bff);
-    font-weight: 800;
+    background: #0b75ff;
+    font-weight: 700;
+}
+
+button[type="submit"].pf-c-button.pf-m-primary:hover,
+ak-stage-identification.style-scope button[type="submit"].pf-c-button.pf-m-primary:hover {
+    background: #075fd1;
 }
 
 .zenmind-source-footer,
@@ -41,7 +46,7 @@ ak-stage-identification.style-scope fieldset[name="login-sources"] {
         gap: var(--pf-global--spacer--sm);
         min-height: 2.875rem;
         border-radius: 0.5rem;
-        font-weight: 800;
+        font-weight: 700;
         flex: 0 1 auto;
 
         &:not(.pf-m-primary):hover {
@@ -57,7 +62,7 @@ ak-stage-identification.style-scope fieldset[name="login-sources"] {
         flex: 1 1 100%;
         width: 100%;
         margin-block-end: var(--pf-global--spacer--sm);
-        border: 1px solid color-mix(in srgb, #172033 14%, transparent);
+        border: 1px solid #d9e1ec;
         color: #172033;
         background: #ffffff;
 
@@ -80,9 +85,21 @@ button[name*="google" i].source-button,
 ak-stage-identification.style-scope button[name*="google" i].source-button {
     flex: 1 1 100%;
     width: 100%;
-    border: 1px solid color-mix(in srgb, #172033 14%, transparent);
+    border: 1px solid #d9e1ec;
     color: #172033;
     background: #ffffff;
+}
+
+fieldset[name="login-sources"] .source-button-promoted.pf-c-button,
+ak-stage-identification.style-scope fieldset[name="login-sources"] .source-button-promoted.pf-c-button {
+    --pf-c-button--m-primary--BackgroundColor: #ffffff;
+    --pf-c-button--m-primary--hover--BackgroundColor: #f8fafc;
+    --pf-c-button--m-primary--Color: #172033;
+    --pf-c-button--m-primary--hover--Color: #172033;
+
+    border: 1px solid #d9e1ec !important;
+    color: #172033 !important;
+    background: #ffffff !important;
 }
 
 .captcha-container {

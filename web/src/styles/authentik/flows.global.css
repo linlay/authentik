@@ -45,17 +45,13 @@
         var(--ak-c-login--PaddingMax)
     );
 
-    --ak-c-login--MaxWidth: 31rem;
-    --ak-c-login__main--BackgroundColor: color-mix(
-        in srgb,
-        var(--pf-global--BackgroundColor--light-100) 92%,
-        transparent
-    );
+    --ak-c-login--MaxWidth: 29rem;
+    --ak-c-login__main--BackgroundColor: var(--pf-global--BackgroundColor--light-100);
     --ak-c-login__main--Color: var(--pf-global--Color--dark-100);
 
     --ak-c-login__main--brand-PaddingMin: var(--pf-global--spacer--xs);
-    --ak-c-login__main--brand-PaddingIdeal: 2.75rem;
-    --ak-c-login__main--brand-PaddingMax: 8dvh;
+    --ak-c-login__main--brand-PaddingIdeal: 1.75rem;
+    --ak-c-login__main--brand-PaddingMax: 2.5rem;
 
     --ak-c-login__main-ColumnWidth: minmax(
         min(100%, var(--ak-c-login--MaxWidth)),
@@ -71,9 +67,9 @@
     --ak-c-login__main-header-PaddingInline: var(--ak-c-login--spacer);
 
     --ak-c-login__main--footer-PaddingMin: var(--pf-global--spacer--xs);
-    --ak-c-login__main--footer-PaddingIdeal: 3rem;
-    --ak-c-login__main--footer-PaddingMax: 9dvh;
-    --ak-c-login__main--BoxShadow: 0 28px 72px color-mix(in srgb, #14213d 18%, transparent);
+    --ak-c-login__main--footer-PaddingIdeal: 2rem;
+    --ak-c-login__main--footer-PaddingMax: 2.75rem;
+    --ak-c-login__main--BoxShadow: 0 18px 50px color-mix(in srgb, #14213d 14%, transparent);
 
     --ak-c-login__footer--PaddingBlock: var(--pf-global--spacer--md);
     --ak-c-login__footer--Color: var(--ak-global--BackgroundColorContrast--100);
@@ -110,11 +106,7 @@
 }
 
 [data-theme="dark"] .pf-c-login {
-    --ak-c-login__main--BackgroundColor: color-mix(
-        in srgb,
-        var(--pf-global--BackgroundColor--dark-100) 90%,
-        transparent
-    );
+    --ak-c-login__main--BackgroundColor: #111827;
 }
 
 /* #endregion */

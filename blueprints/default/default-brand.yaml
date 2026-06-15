@@ -30,8 +30,5 @@ entries:
     identifiers:
       domain: authentik-default
       default: true
-    state: created
-    conditions:
-      # Only create default brand if no other default brand exists
-      - !Condition [NOR, !Find [authentik_brands.brand, [default, True]]]
+    state: present
     model: authentik_brands.brand

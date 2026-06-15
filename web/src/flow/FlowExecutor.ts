@@ -14,7 +14,6 @@ import { aki } from "#common/api/client";
 import { APIError, parseAPIResponseError, pluckErrorDetail } from "#common/errors/network";
 import { globalAK } from "#common/global";
 import { configureSentry } from "#common/sentry/index";
-import { applyBackgroundImageProperty } from "#common/theme";
 import { AKSessionAuthenticatedEvent } from "#common/ws/events";
 
 import { listen } from "#elements/decorators/listen";
@@ -55,7 +54,6 @@ import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { until } from "lit/directives/until.js";
 import { html as staticHTML, unsafeStatic } from "lit/static-html.js";
 
-import PFBackgroundImage from "@patternfly/patternfly/components/BackgroundImage/background-image.css";
 import PFButton from "@patternfly/patternfly/components/Button/button.css";
 import PFDrawer from "@patternfly/patternfly/components/Drawer/drawer.css";
 import PFList from "@patternfly/patternfly/components/List/list.css";
@@ -95,7 +93,6 @@ export class FlowExecutor extends WithBrandConfig(Interface) implements StageHos
         PFButton,
         PFTitle,
         PFList,
-        PFBackgroundImage,
         Styles,
     ];
 
@@ -167,9 +164,6 @@ export class FlowExecutor extends WithBrandConfig(Interface) implements StageHos
         this.addEventListener(AKFlowSubmitRequest.eventName, this.handleSubordinateSubmit);
     }
 
-    /**
-     * Synchronize flow info such as background image with the current state.
-     */
     get #layoutUsesSidebarFrames() {
         return (
             this.layout === FlowLayoutEnum.SidebarLeftFrameBackground ||
@@ -178,18 +172,11 @@ export class FlowExecutor extends WithBrandConfig(Interface) implements StageHos
     }
 
     #synchronizeFlowInfo() {
-        if (!this.flowInfo || this.#layoutUsesSidebarFrames) return;
-
-        const background =
-            this.flowInfo.backgroundThemedUrls?.[this.activeTheme] || this.flowInfo.background;
-
-        // Storybook has a different document structure, so we need to adjust the target accordingly.
-        const target =
-            import.meta.env.AK_BUNDLER === "storybook"
-                ? this.closest<HTMLDivElement>(".docs-story")
-                : this.ownerDocument.body;
-
-        applyBackgroundImageProperty(background, { target });
+        this.ownerDocument.documentElement.style.setProperty(
+            "--ak-global--background-image",
+            "none",
+        );
+        this.ownerDocument.body.style.setProperty("--ak-global--background-image", "none");
     }
 
     //#region Listeners
@@ -421,14 +408,6 @@ export class FlowExecutor extends WithBrandConfig(Interface) implements StageHos
         });
     }
 
-    protected renderZenMindIntro(): SlottedTemplateResult {
-        return html`<aside class="zenmind-login-copy" part="zenmind-login-copy">
-            <p class="zenmind-login-eyebrow">${msg("ZenMind Identity")}</p>
-            <h2>${msg("Sign in to ZenMind")}</h2>
-            <p>${msg("Use your account or Google to continue.")}</p>
-        </aside>`;
-    }
-
     protected override render(): SlottedTemplateResult {
         const { challenge, loading } = this;
 
@@ -441,7 +420,6 @@ export class FlowExecutor extends WithBrandConfig(Interface) implements StageHos
             <header class="pf-c-login__header">
                 <ak-flow-inspector-button></ak-flow-inspector-button>
             </header>
-            ${this.renderZenMindIntro()}
             <main
                 data-layout=${this.layout}
                 class="pf-c-login__main"
@@ -451,11 +429,11 @@ export class FlowExecutor extends WithBrandConfig(Interface) implements StageHos
                 <div class="pf-c-login__main-header pf-c-brand" part="branding">
                     <div class="zenmind-brand-lockup">
                         ${ThemedImage({
-                            src: this.brandingLogo,
+                            src: "/static/dist/assets/images/zenmind-logo.svg",
                             alt: msg("ZenMind logo"),
                             className: "branding-logo",
                             theme: this.activeTheme,
-                            themedUrls: this.brandingLogoThemedUrls,
+                            themedUrls: null,
                         })}
                         <span>ZenMind</span>
                     </div>
