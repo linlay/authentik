@@ -1,6 +1,7 @@
 """authentik oauth_provider urls"""
 
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 from django.urls import include, path
 
 from authentik.providers.oauth2.views.authorize import AuthorizationFlowInitView
@@ -32,11 +33,21 @@ github_urlpatterns = [
     ),
 ]
 
+
+class BrandedAuthorizationFlowInitView(AuthorizationFlowInitView):
+    """Short authorize URL with a friendly empty-query fallback."""
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.method == "GET" and not request.GET:
+            return redirect("authentik_core:login")
+        return super().dispatch(request, *args, **kwargs)
+
+
 urlpatterns = [
     path("", include(github_urlpatterns)),
     path(
         "o/authorize/",
-        AuthorizationFlowInitView.as_view(),
+        BrandedAuthorizationFlowInitView.as_view(),
         name="authorize",
     ),
     path(

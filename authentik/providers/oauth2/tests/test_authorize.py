@@ -724,6 +724,12 @@ class TestAuthorize(OAuthTestCase):
         self.assertEqual(parsed["state"], [state])
         self.assertTrue(parsed["next"][0].startswith("/o/authorize/"))
 
+    def test_empty_short_authorize_redirects_to_login(self):
+        """Test empty short OIDC authorize has a branded fallback"""
+        response = self.client.get(reverse("authentik_providers_oauth2_root:authorize"))
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse("authentik_core:login"))
+
     @apply_blueprint("default/flow-default-authentication-flow.yaml")
     def test_long_authorize_redirects_to_login(self):
         """Test legacy OIDC authorize redirects to branded login"""
