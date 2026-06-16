@@ -12,6 +12,7 @@ from structlog.stdlib import get_logger
 from authentik.flows.challenge import Challenge, ChallengeResponse
 from authentik.sources.oauth.clients.oauth2 import OAuth2Client
 from authentik.sources.oauth.models import AuthorizationCodeAuthMethod, OAuthSource
+from authentik.sources.oauth.short_urls import source_public_slug
 from authentik.sources.oauth.types.registry import SourceType, registry
 from authentik.sources.oauth.views.callback import OAuthCallback
 from authentik.sources.oauth.views.redirect import OAuthRedirect
@@ -113,8 +114,8 @@ class AppleType(SourceType):
             source,
             request,
             callback=reverse(
-                "authentik_sources_oauth:oauth-client-callback",
-                kwargs={"source_slug": source.slug},
+                "authentik_sources_oauth_root:oauth-client-callback",
+                kwargs={"public_source": source_public_slug(source)},
             ),
         )
         args = apple_client.get_redirect_args()

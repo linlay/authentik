@@ -26,7 +26,7 @@ from authentik.core.views.interface import (
     InterfaceView,
     RootRedirectView,
 )
-from authentik.flows.views.interface import FlowInterfaceView
+from authentik.flows.views.interface import FlowInterfaceView, LoginInterfaceView
 from authentik.root.asgi_middleware import AuthMiddlewareStack
 from authentik.root.middleware import ChannelsLoggingMiddleware
 from authentik.root.ws.consumer import MessageConsumer
@@ -45,6 +45,11 @@ urlpatterns = [
         name="application-launch",
     ),
     # Interfaces
+    path(
+        "login/",
+        LoginInterfaceView.as_view(),
+        name="login",
+    ),
     path(
         "if/admin/",
         BrandDefaultRedirectView.as_view(template_name="if/admin.html"),

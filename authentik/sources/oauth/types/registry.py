@@ -10,6 +10,7 @@ from structlog.stdlib import get_logger
 
 from authentik.flows.challenge import Challenge, RedirectChallenge
 from authentik.sources.oauth.models import AuthorizationCodeAuthMethod, OAuthSource, PKCEMethod
+from authentik.sources.oauth.short_urls import source_public_slug
 from authentik.sources.oauth.views.callback import OAuthCallback
 from authentik.sources.oauth.views.redirect import OAuthRedirect
 
@@ -54,8 +55,8 @@ class SourceType:
         return RedirectChallenge(
             data={
                 "to": reverse(
-                    "authentik_sources_oauth:oauth-client-login",
-                    kwargs={"source_slug": source.slug},
+                    "authentik_sources_oauth_root:oauth-client-login",
+                    kwargs={"public_source": source_public_slug(source)},
                 ),
             }
         )

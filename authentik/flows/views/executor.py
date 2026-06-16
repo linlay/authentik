@@ -538,6 +538,8 @@ class ToDefaultFlow(View):
                     flow_slug=flow.slug,
                 )
                 del self.request.session[SESSION_KEY_PLAN]
+        if self.designation == FlowDesignation.AUTHENTICATION:
+            return redirect_with_qs("authentik_core:login", request.GET)
         return redirect_with_qs("authentik_core:if-flow", request.GET, flow_slug=flow.slug)
 
 

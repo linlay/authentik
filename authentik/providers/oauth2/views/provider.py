@@ -49,7 +49,7 @@ class ProviderInfoView(View):
         config = {
             "issuer": provider.get_issuer(self.request),
             "authorization_endpoint": self.request.build_absolute_uri(
-                reverse("authentik_providers_oauth2:authorize")
+                reverse("authentik_providers_oauth2_root:authorize")
             ),
             "token_endpoint": self.request.build_absolute_uri(
                 reverse("authentik_providers_oauth2:token")

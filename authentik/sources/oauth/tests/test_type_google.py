@@ -52,7 +52,7 @@ class TestTypeGoogle(TestCase):
             redirect,
             (
                 f"https://accounts.google.com/o/oauth2/auth?client_id={self.source.consumer_key}&re"
-                "direct_uri=http%3A%2F%2Ftestserver%2Fsource%2Foauth%2Fcallback%2Ftest%2F&response_"
+                "direct_uri=http%3A%2F%2Ftestserver%2Foauth%2Ftest%2Fcallback%2F&response_"
                 f"type=code&state={request.session['oauth-client-test-request-state']}&scope="
                 "email%20profile"
             ),
@@ -70,7 +70,7 @@ class TestTypeGoogle(TestCase):
             redirect,
             (
                 f"https://accounts.google.com/o/oauth2/auth?client_id={self.source.consumer_key}&re"
-                "direct_uri=http%3A%2F%2Ftestserver%2Fsource%2Foauth%2Fcallback%2Ftest%2F&response_"
+                "direct_uri=http%3A%2F%2Ftestserver%2Foauth%2Ftest%2Fcallback%2F&response_"
                 f"type=code&state={request.session['oauth-client-test-request-state']}&scope="
                 "email%20foo%20profile"
             ),
@@ -88,7 +88,7 @@ class TestTypeGoogle(TestCase):
             redirect,
             (
                 f"https://accounts.google.com/o/oauth2/auth?client_id={self.source.consumer_key}&re"
-                "direct_uri=http%3A%2F%2Ftestserver%2Fsource%2Foauth%2Fcallback%2Ftest%2F&response_"
+                "direct_uri=http%3A%2F%2Ftestserver%2Foauth%2Ftest%2Fcallback%2F&response_"
                 f"type=code&state={request.session['oauth-client-test-request-state']}&scope="
                 "foo"
             ),

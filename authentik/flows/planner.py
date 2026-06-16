@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any
 
 from django.core.cache import cache
-from django.http import HttpRequest, HttpResponse
+from django.http import Http404, HttpRequest, HttpResponse
 from django.utils.translation import gettext as _
 from sentry_sdk import start_span
 from sentry_sdk.tracing import Span
@@ -142,6 +142,18 @@ class FlowPlan:
         LOGGER.debug("Required flow executor status", status=found_unskippable)
         return found_unskippable
 
+    def should_use_short_login(self, request: HttpRequest, flow: Flow) -> bool:
+        """Check if this plan targets the public login URL."""
+        from authentik.flows.views.executor import ToDefaultFlow
+
+        if flow.designation != FlowDesignation.AUTHENTICATION:
+            return False
+        try:
+            auth_flow = ToDefaultFlow.get_flow(request, FlowDesignation.AUTHENTICATION)
+        except Http404:
+            return False
+        return flow.pk == auth_flow.pk
+
     def to_redirect(
         self,
         request: HttpRequest,
@@ -182,11 +194,9 @@ class FlowPlan:
         if next:
             get_qs[NEXT_ARG_NAME] = next
 
-        return redirect_with_qs(
-            "authentik_core:if-flow",
-            get_qs,
-            flow_slug=flow.slug,
-        )
+        if self.should_use_short_login(request, flow):
+            return redirect_with_qs("authentik_core:login", get_qs)
+        return redirect_with_qs("authentik_core:if-flow", get_qs, flow_slug=flow.slug)
 
 
 class FlowPlanner:

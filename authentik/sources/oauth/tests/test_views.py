@@ -186,7 +186,7 @@ class TestOAuthSource(APITestCase):
         session = self.client.session
         state = session[f"oauth-client-{self.source.name}-request-state"]
 
-        self.assertEqual(qs["redirect_uri"], ["http://testserver/source/oauth/callback/test/"])
+        self.assertEqual(qs["redirect_uri"], ["http://testserver/oauth/test/callback/"])
         self.assertEqual(qs["response_type"], ["code"])
         self.assertEqual(qs["state"], [state])
         self.assertEqual(qs["scope"], ["email openid profile"])
@@ -210,7 +210,7 @@ class TestOAuthSource(APITestCase):
         self.assertEqual(len(verifier), 128)
         challenge = pkce_s256_challenge(verifier)
 
-        self.assertEqual(qs["redirect_uri"], ["http://testserver/source/oauth/callback/test/"])
+        self.assertEqual(qs["redirect_uri"], ["http://testserver/oauth/test/callback/"])
         self.assertEqual(qs["response_type"], ["code"])
         self.assertEqual(qs["state"], [state])
         self.assertEqual(qs["scope"], ["email openid profile"])
@@ -226,3 +226,28 @@ class TestOAuthSource(APITestCase):
             )
         )
         self.assertEqual(res.status_code, 302)
+
+    def test_short_source_callback(self):
+        """test short callback view"""
+        res = self.client.get(
+            reverse(
+                "authentik_sources_oauth_root:oauth-client-callback",
+                kwargs={"public_source": self.source.slug},
+            )
+        )
+        self.assertEqual(res.status_code, 302)
+
+    def test_short_source_alias_redirect(self):
+        """test short source aliases resolve to internal source slugs"""
+        self.source.slug = "zenmind-google"
+        self.source.provider_type = "google"
+        self.source.save()
+        res = self.client.get(
+            reverse(
+                "authentik_sources_oauth_root:oauth-client-login",
+                kwargs={"public_source": "google"},
+            )
+        )
+        self.assertEqual(res.status_code, 302)
+        qs = parse_qs(res.url)
+        self.assertEqual(qs["redirect_uri"], ["http://testserver/oauth/google/callback/"])

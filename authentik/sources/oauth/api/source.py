@@ -18,6 +18,7 @@ from authentik.core.api.used_by import UsedByMixin
 from authentik.core.api.utils import PassiveSerializer
 from authentik.lib.utils.http import get_http_session
 from authentik.sources.oauth.models import OAuthSource, PKCEMethod
+from authentik.sources.oauth.short_urls import source_public_slug
 from authentik.sources.oauth.types.registry import SourceType, registry
 
 
@@ -45,8 +46,8 @@ class OAuthSourceSerializer(SourceSerializer):
     def get_callback_url(self, instance: OAuthSource) -> str:
         """Get OAuth Callback URL"""
         relative_url = reverse_lazy(
-            "authentik_sources_oauth:oauth-client-callback",
-            kwargs={"source_slug": instance.slug},
+            "authentik_sources_oauth_root:oauth-client-callback",
+            kwargs={"public_source": source_public_slug(instance)},
         )
         if "request" not in self.context:
             return relative_url

@@ -695,6 +695,70 @@ class TestAuthorize(OAuthTestCase):
         self.assertNotIn(SCOPE_OFFLINE_ACCESS, parsed.scope)
 
     @apply_blueprint("default/flow-default-authentication-flow.yaml")
+    def test_short_authorize_redirects_to_login(self):
+        """Test short OIDC authorize redirects to branded login"""
+        flow = create_test_flow()
+        provider = OAuth2Provider.objects.create(
+            name=generate_id(),
+            client_id="test",
+            authorization_flow=flow,
+            redirect_uris=[RedirectURI(RedirectURIMatchingMode.STRICT, "foo://localhost")],
+            access_code_validity="seconds=100",
+            grant_types=[GrantType.AUTHORIZATION_CODE],
+        )
+        Application.objects.create(name="app", slug="app", provider=provider)
+        state = generate_id()
+        response = self.client.get(
+            reverse("authentik_providers_oauth2_root:authorize"),
+            data={
+                "response_type": "code",
+                "client_id": "test",
+                "state": state,
+                "redirect_uri": "foo://localhost",
+            },
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith(reverse("authentik_core:login")))
+        parsed = parse_qs(urlparse(response.url).query)
+        self.assertEqual(parsed["client_id"], ["test"])
+        self.assertEqual(parsed["state"], [state])
+        self.assertTrue(parsed["next"][0].startswith("/o/authorize/"))
+
+    @apply_blueprint("default/flow-default-authentication-flow.yaml")
+    def test_long_authorize_redirects_to_login(self):
+        """Test legacy OIDC authorize redirects to branded login"""
+        flow = create_test_flow()
+        provider = OAuth2Provider.objects.create(
+            name=generate_id(),
+            client_id="test",
+            authorization_flow=flow,
+            redirect_uris=[RedirectURI(RedirectURIMatchingMode.STRICT, "foo://localhost")],
+            access_code_validity="seconds=100",
+            grant_types=[GrantType.AUTHORIZATION_CODE],
+        )
+        Application.objects.create(name="app", slug="app", provider=provider)
+        response = self.client.get(
+            reverse("authentik_providers_oauth2:authorize"),
+            data={
+                "response_type": "code",
+                "client_id": "test",
+                "state": generate_id(),
+                "redirect_uri": "foo://localhost",
+            },
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith(reverse("authentik_core:login")))
+        parsed = parse_qs(urlparse(response.url).query)
+        self.assertTrue(parsed["next"][0].startswith("/application/o/authorize/"))
+
+    @apply_blueprint("default/flow-default-authentication-flow.yaml")
+    def test_login_renders_default_authentication_flow(self):
+        """Test branded login renders the default authentication flow directly"""
+        response = self.client.get(reverse("authentik_core:login"), data={"state": "test"})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'slug="default-authentication-flow"')
+
+    @apply_blueprint("default/flow-default-authentication-flow.yaml")
     def test_ui_locales(self):
         """Test OIDC ui_locales authorization"""
         flow = create_test_flow()

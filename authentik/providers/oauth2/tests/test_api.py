@@ -51,6 +51,19 @@ class TestAPI(APITestCase):
         self.assertEqual(response.status_code, 200)
         body = loads(response.content.decode())
         self.assertEqual(body["issuer"], "http://testserver/application/o/test/")
+        self.assertEqual(body["authorize"], "http://testserver/o/authorize/")
+
+    def test_provider_info_uses_short_authorize(self):
+        """Test provider info advertises branded authorize URL"""
+        response = self.client.get(
+            reverse(
+                "authentik_providers_oauth2:provider-info",
+                kwargs={"application_slug": self.app.slug},
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+        body = loads(response.content.decode())
+        self.assertEqual(body["authorization_endpoint"], "http://testserver/o/authorize/")
 
     # https://github.com/goauthentik/authentik/pull/5918
     @skipUnless(version_info >= (3, 11, 4), "This behaviour is only Python 3.11.4 and up")

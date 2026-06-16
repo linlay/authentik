@@ -284,9 +284,9 @@ class TestUserLoginStage(FlowTestCase):
         self.assertEqual(
             res.url,
             reverse(
-                "authentik_flows:default-authentication",
+                "authentik_core:login",
             )
-            + f"?{NEXT_ARG_NAME}={reverse("authentik_api:user-me")}",
+            + f"?{NEXT_ARG_NAME}={reverse('authentik_api:user-me')}",
         )
         event = Event.objects.filter(action=EventAction.LOGOUT).first()
         self.assertEqual(event.user, get_user(self.user))

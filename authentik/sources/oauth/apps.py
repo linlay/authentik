@@ -34,7 +34,10 @@ class AuthentikSourceOAuthConfig(ManagedAppConfig):
     name = "authentik.sources.oauth"
     label = "authentik_sources_oauth"
     verbose_name = "authentik Sources.OAuth"
-    mountpoint = "source/oauth/"
+    mountpoints = {
+        "authentik.sources.oauth.urls_root": "",
+        "authentik.sources.oauth.urls": "source/oauth/",
+    }
     default = True
 
     def import_related(self):

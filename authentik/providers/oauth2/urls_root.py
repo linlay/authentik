@@ -35,6 +35,11 @@ github_urlpatterns = [
 urlpatterns = [
     path("", include(github_urlpatterns)),
     path(
+        "o/authorize/",
+        AuthorizationFlowInitView.as_view(),
+        name="authorize",
+    ),
+    path(
         "device",
         login_required(
             DeviceEntryView.as_view(),

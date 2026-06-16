@@ -138,7 +138,7 @@ class OAuth2ProviderViewSet(UsedByMixin, ModelViewSet):
             "issuer": provider.get_issuer(request),
             "authorize": request.build_absolute_uri(
                 reverse(
-                    "authentik_providers_oauth2:authorize",
+                    "authentik_providers_oauth2_root:authorize",
                 )
             ),
             "token": request.build_absolute_uri(

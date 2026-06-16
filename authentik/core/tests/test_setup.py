@@ -27,7 +27,7 @@ class TestSetup(FlowTestCase):
         self.assertEqual(res.status_code, HTTPStatus.FOUND)
         self.assertRedirects(
             res,
-            reverse("authentik_flows:default-authentication") + "?next=/",
+            reverse("authentik_core:login") + "?next=/",
             fetch_redirect_response=False,
         )
 

@@ -27,7 +27,7 @@ INTERNAL_IPS = ["127.0.0.1"]
 ALLOWED_HOSTS = ["*"]
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None
-LOGIN_URL = "authentik_flows:default-authentication"
+LOGIN_URL = "authentik_core:login"
 
 # Custom user model
 AUTH_USER_MODEL = "authentik_core.User"

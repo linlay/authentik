@@ -11,6 +11,7 @@ from authentik.flows.planner import PLAN_CONTEXT_PENDING_USER, FlowPlan
 from authentik.flows.stage import PLAN_CONTEXT_PENDING_USER_IDENTIFIER
 from authentik.flows.views.executor import SESSION_KEY_PLAN
 from authentik.sources.oauth.models import OAuthSource
+from authentik.sources.oauth.short_urls import source_public_slug
 from authentik.sources.oauth.views.base import OAuthClientMixin
 
 LOGGER = get_logger()
@@ -29,8 +30,8 @@ class OAuthRedirect(OAuthClientMixin, RedirectView):
     def get_callback_url(self, source: OAuthSource) -> str:
         "Return the callback url for this source."
         return reverse(
-            "authentik_sources_oauth:oauth-client-callback",
-            kwargs={"source_slug": source.slug},
+            "authentik_sources_oauth_root:oauth-client-callback",
+            kwargs={"public_source": source_public_slug(source)},
         )
 
     def _try_login_hint_extract(self) -> dict[str, str]:

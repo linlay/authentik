@@ -17,6 +17,7 @@ from authentik.core.models import (
     UserSourceConnection,
 )
 from authentik.core.types import UILoginButton, UserSettingSerializer
+from authentik.sources.oauth.short_urls import source_public_slug
 
 if TYPE_CHECKING:
     from authentik.sources.oauth.types.registry import SourceType
@@ -146,8 +147,8 @@ class OAuthSource(NonCreatableType, Source):
                 "title": self.name,
                 "component": "ak-user-settings-source-oauth",
                 "configure_url": reverse(
-                    "authentik_sources_oauth:oauth-client-login",
-                    kwargs={"source_slug": self.slug},
+                    "authentik_sources_oauth_root:oauth-client-login",
+                    kwargs={"public_source": source_public_slug(self)},
                 ),
                 "icon_url": self.icon_url,
             }

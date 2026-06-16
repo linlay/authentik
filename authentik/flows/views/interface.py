@@ -6,14 +6,18 @@ from django.shortcuts import get_object_or_404
 from ua_parser.user_agent_parser import Parse
 
 from authentik.core.views.interface import InterfaceView
-from authentik.flows.models import Flow
+from authentik.flows.models import Flow, FlowDesignation
 
 
 class FlowInterfaceView(InterfaceView):
     """Flow interface"""
 
+    def get_flow(self) -> Flow:
+        """Return the flow to render."""
+        return get_object_or_404(Flow, slug=self.kwargs.get("flow_slug"))
+
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-        flow = get_object_or_404(Flow, slug=self.kwargs.get("flow_slug"))
+        flow = self.get_flow()
         kwargs["flow"] = flow
         kwargs["flow_background_url"] = flow.background_url(self.request)
         kwargs["inspector"] = "inspector" in self.request.GET
@@ -41,3 +45,12 @@ class FlowInterfaceView(InterfaceView):
         if self.compat_needs_sfe() or "sfe" in self.request.GET:
             return ["if/flow-sfe.html"]
         return ["if/flow.html"]
+
+
+class LoginInterfaceView(FlowInterfaceView):
+    """Branded short URL for the default authentication flow."""
+
+    def get_flow(self) -> Flow:
+        from authentik.flows.views.executor import ToDefaultFlow
+
+        return ToDefaultFlow.get_flow(self.request, FlowDesignation.AUTHENTICATION)
